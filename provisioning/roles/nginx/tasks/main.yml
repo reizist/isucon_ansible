@@ -1,7 +1,3 @@
-- name: nginx started
-  become: yes
-  command: systemctl start nginx
-
 - name: update nginx conf
   template:
     src: templates/nginx.conf
