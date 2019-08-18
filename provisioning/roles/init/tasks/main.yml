@@ -1,41 +1,37 @@
 ---
-- hosts: allservers
-  sudo: yes
-  gather_facts: no
-  tasks:
-    - name: Create isucon group
-      group:
-        name: isucon
-        gid: 1001
-        state: present
-        system: no
+- name: Create isucon group
+  group:
+    name: isucon
+    gid: 1001
+    state: present
+    system: no
 
-    - name: Create isucon user
-      user:
-        name: isucon
-        uid: 1001
-        group: isucon
-        password: isucon
-        home: /home/isucon
-        shell: /bin/bash
-        state: present
-        system: no
+- name: Create isucon user
+  user:
+    name: isucon
+    uid: 1001
+    group: isucon
+    password: isucon
+    home: /home/isucon
+    shell: /bin/bash
+    state: present
+    system: no
 
-    - name: Add sudoers
-      copy:
-        content: "isucon  ALL=(ALL) NOPASSWD:ALL\n"
-        dest: /etc/sudoers.d/90-isucon-user
-        owner: root
-        group: root
-        mode: 0440
+- name: Add sudoers
+  copy:
+    content: "isucon  ALL=(ALL) NOPASSWD:ALL\n"
+    dest: /etc/sudoers.d/90-isucon-user
+    owner: root
+    group: root
+    mode: 0440
 
-    - name: Install Dependencies
-      yum:
-        name: "{{ item }}"
-        state: installed
-      become: yes
-      with_items:
-        - epel-release
-        - vim
-        - git
-        - ansible
+- name: Install Dependencies
+  yum:
+    name: "{{ item }}"
+    state: installed
+  become: yes
+  with_items:
+    - epel-release
+    - vim
+    - git
+    - ansible
