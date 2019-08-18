@@ -35,3 +35,15 @@
     - vim
     - git
     - ansible
+
+- name: mkdir .ssh
+  file: dest=/home/isucon/.ssh/ state=directory owner=isucon group=isucon mode=700
+- name: add authorized keys
+  file: dest=/home/isucon/.ssh/authorized_keys state=touch owner=isucon group=isucon mode=600
+- name: copy publickeys from github
+  authorized_key:
+    user: isucon
+    state: present
+    key: "https://github.com/{{ item }}.keys"
+  with_items:
+    - reizist
