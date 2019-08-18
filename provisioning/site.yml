@@ -1,0 +1,7 @@
+---
+- hosts: allservers
+  sudo: yes
+  gather_facts: no
+  user: root
+  roles:
+    - init

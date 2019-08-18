@@ -1,0 +1,49 @@
+---
+- name: Create isucon group
+  group:
+    name: isucon
+    gid: 1001
+    state: present
+    system: no
+
+- name: Create isucon user
+  user:
+    name: isucon
+    uid: 1001
+    group: isucon
+    password: isucon
+    home: /home/isucon
+    shell: /bin/bash
+    state: present
+    system: no
+
+- name: Add sudoers
+  copy:
+    content: "isucon  ALL=(ALL) NOPASSWD:ALL\n"
+    dest: /etc/sudoers.d/90-isucon-user
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Install Dependencies
+  yum:
+    name: "{{ item }}"
+    state: installed
+  become: yes
+  with_items:
+    - epel-release
+    - vim
+    - git
+    - ansible
+
+- name: mkdir .ssh
+  file: dest=/home/isucon/.ssh/ state=directory owner=isucon group=isucon mode=700
+- name: add authorized keys
+  file: dest=/home/isucon/.ssh/authorized_keys state=touch owner=isucon group=isucon mode=600
+- name: copy publickeys from github
+  authorized_key:
+    user: isucon
+    state: present
+    key: "https://github.com/{{ item }}.keys"
+  with_items:
+    - reizist
