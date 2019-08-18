@@ -1,0 +1,8 @@
+- name: update nginx conf
+  template:
+    src: templates/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: isucon
+    group: isucon
+    mode: 0644
+  notify: nginx-reload
