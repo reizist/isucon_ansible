@@ -1,0 +1,59 @@
+---
+- name: Append remi repository # for installing latest version
+  become: yes
+  become_user: root
+  yum:
+    name: "http://rpms.famillecollet.com/enterprise/remi-release-7.rpm"
+
+- name: Install redis 
+  become: yes
+  become_user: root
+  yum:
+    pkg: "{{ item }}"
+    state: installed
+    enablerepo: "remi"
+  with_items:
+    - redis
+
+- name: enable redis service
+  become: yes
+  become_user: root
+  command: systemctl enable redis
+
+- name: chown redis log path
+  become: yes
+  become_user: root
+  file:
+    path: /var/log/redis
+    state: directory
+    owner: redis
+    group: isucon
+    recurse: yes
+
+- name: chown redis conf path
+  become: yes
+  become_user: root
+  file:
+    path: /etc/redis
+    state: directory
+    owner: redis
+    group: isucon
+    recurse: yes
+
+- name: chown redis rdb path
+  become: yes
+  become_user: root
+  file:
+    path: /var/lib/redis
+    state: directory
+    owner: redis
+    group: isucon
+    recurse: yes
+
+- name: sure to mkdir pid dir
+  become: yes
+  file:
+    path: /var/run/redis
+    state: directory
+    owner: redis
+    group: isucon

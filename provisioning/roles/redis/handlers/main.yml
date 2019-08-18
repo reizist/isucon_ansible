@@ -1,0 +1,5 @@
+---
+
+- name: redis-reload
+  become: yes
+  command: systemctl restart redis
