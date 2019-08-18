@@ -1,0 +1,48 @@
+---
+- name: Append nginx repository
+  become: yes
+  become_user: root
+  blockinfile:
+    create: yes
+    dest: /etc/yum.repos.d/nginx.repo
+    content: |
+      [nginx]
+      name=nginx
+      baseurl=http://nginx.org/packages/centos/7/$basearch/
+      gpgcheck=0
+      repo_gpgcheck=0
+      enabled=1
+
+- name: Install nginx
+  become: yes
+  become_user: root
+  yum:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - nginx
+
+- name: enable nginx service
+  become: yes
+  become_user: root
+  command: systemctl enable nginx
+
+- name: chown nginx log path
+  become: yes
+  become_user: root
+  file:
+    path: /var/log/nginx
+    state: directory
+    owner: isucon
+    group: isucon
+    recurse: yes
+
+- name: chown nginx log path
+  become: yes
+  become_user: root
+  file:
+    path: /etc/nginx
+    state: directory
+    owner: isucon
+    group: isucon
+    recurse: yes
