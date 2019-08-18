@@ -1,0 +1,10 @@
+- name: update redis conf
+  become: yes
+  become_user: root
+  template:
+    src: templates/redis.conf
+    dest: /etc/redis.conf
+    owner: isucon
+    group: isucon
+    mode: 0644
+  notify: redis-reload
