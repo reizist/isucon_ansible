@@ -3,3 +3,4 @@
   roles:
     - install_nginx
     - install_redis
+    - install_alp
