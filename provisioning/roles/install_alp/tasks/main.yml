@@ -1,0 +1,28 @@
+
+- name: include vars
+  include_vars: "../vars/main.yml"
+
+- name: check bin
+  stat: path=/usr/local/bin/alp
+  register: binary
+
+- name: check zip
+  stat: path=/usr/local/bin/alp
+  register: zip
+
+- name: download alp binary
+  # install binaryが違う場合 uname -a でbit等確認
+  get_url:
+    url="https://github.com/tkuchiki/alp/releases/download/v{{alp_version}}/alp_linux_amd64.zip"
+    dest="/home/isucon/alp_linux_amd64_{{alp_version}}.zip"
+  when: not zip.stat.exists
+
+- name: unzip binary
+  become: yes
+  command: unzip /home/isucon/alp_linux_amd64_{{alp_version}}.zip -d /usr/local/bin/
+  when: not binary.stat.exists
+
+- name: allow execute
+  command: chmod +x /usr/local/bin/alp
+  become: yes
+  when: binary.stat.exists
