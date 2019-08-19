@@ -35,6 +35,7 @@
     - vim
     - git
     - ansible
+    - unzip
 
 - name: mkdir .ssh
   file: dest=/home/isucon/.ssh/ state=directory owner=isucon group=isucon mode=700
